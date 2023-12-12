@@ -599,6 +599,11 @@ private:
     struct messages_t {
         pthread_mutex_t mutex;
 
+        pthread_cond_t mount_status_cond;
+        pthread_cond_t mount_orientation_cond;
+        pthread_cond_t attitude_status_cond;
+        pthread_cond_t raw_imu_cond;
+
         // Heartbeat
         mavlink_heartbeat_t heartbeat = { 0 };
 
@@ -626,11 +631,21 @@ private:
         messages_t()
         {
             pthread_mutex_init(&mutex, NULL);
+
+            pthread_cond_init(&mount_status_cond, NULL);
+            pthread_cond_init(&mount_orientation_cond, NULL);
+            pthread_cond_init(&attitude_status_cond, NULL);
+            pthread_cond_init(&raw_imu_cond, NULL);
         }
 
         ~messages_t()
         {
             pthread_mutex_destroy(&mutex);
+
+            pthread_cond_destroy(&mount_status_cond);
+            pthread_cond_destroy(&mount_orientation_cond);
+            pthread_cond_destroy(&attitude_status_cond);
+            pthread_cond_destroy(&raw_imu_cond);
         }
 
         void reset_timestamps()
